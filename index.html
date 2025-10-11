@@ -2,9 +2,22 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Loading Application...</title>
+  <title>Loading Web App...</title>
   
-  <meta http-equiv="refresh" content="0; url=https://script.google.com/macros/s/AKfycbzrWrM6JBlYyhtCcX36baQtIbV-9FbtlFYE7mAcNuY9EwLiHx4sY4mAlMSmIHwM76OFQQ/exec">
+  <script>
+    // 1. Define the base URL of your Apps Script deployment.
+    const APPS_SCRIPT_BASE_URL = "https://script.google.com/macros/s/AKfycbzrWrM6JBlYyhtCcX36baQtIbV-9FbtlFYE7mAcNuY9EwLiHx4sY4mAlMSmIHwM76OFQQ/exec";
+    
+    // 2. Get the parameters (the query string) from the current GitHub URL.
+    //    Example: retrieves "?page=fs" from the GitHub link.
+    const queryString = window.location.search; 
+
+    // 3. Construct the new, complete URL.
+    const targetUrl = APPS_SCRIPT_BASE_URL + queryString;
+    
+    // 4. Redirect the browser to the new URL immediately.
+    window.location.replace(targetUrl);
+  </script>
   
   <style>
     body { 
@@ -19,6 +32,13 @@
 </head>
 <body>
   <h1>Redirecting to the Web Application...</h1>
-  <p>If you are not redirected automatically, please <a href="https://script.google.com/macros/s/AKfycbzrWrM6JBlYyhtCcX36baQtIbV-9FbtlFYE7mAcNuY9EwLiHx4sY4mAlMSmIHwM76OFQQ/exec">click here to proceed</a>.</p>
+  <p>If the page does not load automatically, please 
+     <a id="fallback-link" href="#">click here to proceed</a>.
+  </p>
+  
+  <script>
+    // Update the fallback link dynamically in case JavaScript is blocked.
+    document.getElementById('fallback-link').href = targetUrl;
+  </script>
 </body>
 </html>
