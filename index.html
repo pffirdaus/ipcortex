@@ -1,44 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Loading Web App...</title>
-  
-  <script>
-    // 1. Define the base URL of your Apps Script deployment.
-    const APPS_SCRIPT_BASE_URL = "https://script.google.com/macros/s/AKfycbzrWrM6JBlYyhtCcX36baQtIbV-9FbtlFYE7mAcNuY9EwLiHx4sY4mAlMSmIHwM76OFQQ/exec";
-    
-    // 2. Get the parameters (the query string) from the current GitHub URL.
-    //    Example: retrieves "?page=fs" from the GitHub link.
-    const queryString = window.location.search; 
-
-    // 3. Construct the new, complete URL.
-    const targetUrl = APPS_SCRIPT_BASE_URL + queryString;
-    
-    // 4. Redirect the browser to the new URL immediately.
-    window.location.replace(targetUrl);
-  </script>
-  
-  <style>
-    body { 
-      font-family: sans-serif; 
-      text-align: center; 
-      padding-top: 50px; 
-      margin: 0;
-      color: #333;
-      background-color: #f4f4f4;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Recorder</title>
+    <style>
+        body { margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.1s, background 0.2s;
+            width: 90%; /* Optimized for mobile touch */
+            max-width: 300px;
+        }
+        .btn:active { transform: scale(0.95); background-color: #1557b0; }
+        .btn:disabled { background-color: #aaa; }
+        #msg { margin-top: 15px; font-size: 14px; color: #555; height: 20px; }
+    </style>
 </head>
 <body>
-  <h1>Redirecting to the Web Application...</h1>
-  <p>If the page does not load automatically, please 
-     <a id="fallback-link" href="#">click here to proceed</a>.
-  </p>
-  
-  <script>
-    // Update the fallback link dynamically in case JavaScript is blocked.
-    document.getElementById('fallback-link').href = targetUrl;
-  </script>
+
+    <button id="punchBtn" class="btn" onclick="sendData()">Record My Time</button>
+    <div id="msg"></div>
+
+    <script>
+        function sendData() {
+            const btn = document.getElementById('punchBtn');
+            const msg = document.getElementById('msg');
+            const url = "PASTE_YOUR_WEB_APP_URL_HERE";
+
+            btn.disabled = true;
+            msg.innerText = "Processing...";
+            msg.style.color = "black";
+
+            // We use 'no-cors' to prevent the multi-account redirect block
+            fetch(url, {
+                method: "GET",
+                mode: "no-cors",
+                cache: "no-cache"
+            })
+            .then(() => {
+                msg.innerText = "? Logged Successfully!";
+                msg.style.color = "green";
+                setTimeout(() => {
+                    msg.innerText = "";
+                    btn.disabled = false;
+                }, 4000);
+            })
+            .catch(err => {
+                msg.innerText = "? Connection Error";
+                msg.style.color = "red";
+                btn.disabled = false;
+            });
+        }
+    </script>
 </body>
 </html>
